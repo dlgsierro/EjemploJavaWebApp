@@ -1,16 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
   <modelVersion>4.0.0</modelVersion>
   <groupId>cl.dl</groupId>
   <artifactId>webapp</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <name>webapp Maven Webapp</name>
+  
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	  <maven.compiler.source>1.8</maven.compiler.source>
+	  <maven.compiler.target>1.8</maven.compiler.target>
+	  <jetty.version>9.4.7.v20170914</jetty.version>
+	  <shiro.version>1.4.0</shiro.version>
+	  <slf4j.version>1.7.25</slf4j.version>
   </properties>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -18,10 +24,69 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+	<dependency>
+	    <groupId>org.apache.shiro</groupId>
+	    <artifactId>shiro-core</artifactId>
+	    <version>${shiro.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.shiro</groupId>
+	    <artifactId>shiro-web</artifactId>
+	    <version>${shiro.version}</version>
+	</dependency>
+	<dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+        <scope>runtime</scope>
+    </dependency>
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>javax.servlet-api</artifactId>
+	    <version>4.0.0</version>
+	    <scope>provided</scope>
+	</dependency>
+	<dependency>
+	    <groupId>jstl</groupId>
+	    <artifactId>jstl</artifactId>
+	    <version>1.2</version>
+	</dependency>
   </dependencies>
+  
   <build>
     <finalName>webapp</finalName>
     <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <contextPath>/</contextPath>
+                    <httpConnector>
+                        <port>9080</port>
+                        <idleTimeout>60000</idleTimeout>
+                    </httpConnector>
+                    <requestLog implementation="org.eclipse.jetty.server.NCSARequestLog">
+                        <filename>./target/yyyy_mm_dd.request.log</filename>
+                        <retainDays>90</retainDays>
+                        <append>true</append>
+                        <extended>false</extended>
+                        <logTimeZone>GMT</logTimeZone>
+                    </requestLog>
+                </configuration>
+            </plugin>
 		<plugin>
 			<groupId>org.apache.tomcat.maven</groupId>
 			<artifactId>tomcat7-maven-plugin</artifactId>
