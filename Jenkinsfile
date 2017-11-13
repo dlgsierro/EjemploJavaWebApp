@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent { dockerfile true }
     stages {
 		stage('Build') {
 	        steps {
@@ -16,14 +11,17 @@ pipeline {
 	            sh 'mvn test findbugs:findbugs'
 	        }
 	    }
+	    stage('Deploy') {
+	        steps {
+	            sh 'mvn tomcat7:deploy'
+	        }
+	    }
 	}
 	post {
         always {
-        	stage('Reports') {
-	            junit 'target/surefire-reports/*.xml'
-	            jacoco()
-	            findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
-        	}
+            junit 'target/surefire-reports/*.xml'
+            jacoco()
+            findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
         }
     	failure {
     	    emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.

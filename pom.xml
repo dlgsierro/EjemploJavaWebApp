@@ -75,7 +75,7 @@
                 <configuration>
                     <contextPath>/</contextPath>
                     <httpConnector>
-                        <port>9080</port>
+                        <port>8080</port>
                         <idleTimeout>60000</idleTimeout>
                     </httpConnector>
                     <requestLog implementation="org.eclipse.jetty.server.NCSARequestLog">
@@ -92,7 +92,7 @@
 			<artifactId>tomcat7-maven-plugin</artifactId>
 			<version>2.2</version>
 			<configuration>
-				<url>http://localhost:9080/manager/text</url>
+				<url>http://localhost:8080/manager/text</url>
 				<server>TomcatServer</server>
 				<username>admin</username>
 				<password>password</password>
