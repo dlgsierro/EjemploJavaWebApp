@@ -13,14 +13,14 @@ pipeline {
 	    }
 	    stage('Test') {
 	        steps {
-	            sh 'mvn test'
+	            sh 'mvn test findbugs:findbugs'
 	        }
 	    }
 	}
 	post {
         always {
             junit 'target/surefire-reports/*.xml'
-            jacoco()
+            step( [ $class: 'JacocoPublisher' ] )
             findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
         }
     	failure {
