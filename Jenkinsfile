@@ -15,16 +15,14 @@ pipeline {
 	        steps {
 	            sh 'mvn test'
 	        }
-	        post {
-	            always {
-	                junit 'target/surefire-reports/*.xml'
-	                jacoco()
-	                findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
-	            }
-	        }
 	    }
 	}
 	post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+            jacoco()
+            findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
+        }
     	failure {
     	    emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.
 
