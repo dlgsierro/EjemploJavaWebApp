@@ -6,7 +6,7 @@ pipeline {
         }
     }
     stages {
-	    stage('Build') {
+		stage('Build') {
 	        steps {
 	            sh 'mvn -B -DskipTests clean package'
 	        }
@@ -22,14 +22,14 @@ pipeline {
 	                findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
 	            }
 	        }
-	    } post {
-	    	failure {
-	    	    emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.
+	    }
+	} post {
+    	failure {
+    	    emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.
 
 Thanks,
 Jenkins''', subject: 'Jenkins failure', to: 'gsierro@dl.cl'
-	    	    
-	    	}
+
 	    }
     }
 }
