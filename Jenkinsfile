@@ -23,7 +23,8 @@ pipeline {
 	            }
 	        }
 	    }
-	} post {
+	}
+	post {
     	failure {
     	    emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.
 
