@@ -20,7 +20,7 @@ pipeline {
 	post {
         always {
             junit 'target/surefire-reports/*.xml'
-            step( [ $class: 'JacocoPublisher' ] )
+            jacoco()
             findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
         }
     	failure {
