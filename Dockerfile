@@ -1,5 +1,5 @@
 FROM tomcat
-MAINTAINER "Gonzalo Sierro <gsierro@gmail.com>"
+MAINTAINER "Gonzalo Sierro <gsierro@dl.cl>"
 
 RUN apt-get update
 RUN apt-get install -y wget
@@ -16,3 +16,4 @@ ADD docker/settings.xml /usr/local/tomcat/conf/
 ADD docker/tomcat-users.xml /usr/local/tomcat/conf/
 
 EXPOSE 8080
+CMD ["catalina.sh", "run"]
