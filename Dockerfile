@@ -2,7 +2,7 @@ FROM tomcat
 MAINTAINER "Gonzalo Sierro <gsierro@dl.cl>"
 
 RUN apt-get update
-RUN apt-get install -y wget
+RUN apt-get install -y wget git
 RUN wget --no-verbose -O /tmp/apache-maven.tar.gz http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
 RUN echo "948110de4aab290033c23bf4894f7d9a /tmp/apache-maven.tar.gz" | md5sum -c
 RUN tar xzf /tmp/apache-maven.tar.gz -C /opt/
