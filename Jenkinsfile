@@ -1,6 +1,5 @@
-pipeline {
-   	agent any
-    stages {
+node {
+	try {
 	    stage('Prepare') {
 	    	checkout scm
 	    	def env = docker.build('tomcat-maven')
@@ -15,6 +14,13 @@ pipeline {
 		        steps {
 		            sh 'mvn test findbugs:findbugs'
 		        }
+				post {
+			        success {
+			            junit 'target/surefire-reports/*.xml'
+			            jacoco()
+			            findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
+			        }
+			    }
 		    }
 		    stage('Deploy') {
 		        steps {
@@ -23,18 +29,11 @@ pipeline {
 		    }
 	    }
 	}
-	post {
-        always {
-            junit 'target/surefire-reports/*.xml'
-            jacoco()
-            findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
-        }
-    	failure {
-    	    emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.
+	catch(any) {
+		throw any
+   	    emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.
 
 Thanks,
 Jenkins''', subject: 'Jenkins failure', to: 'gsierro@dl.cl'
-
-	    }
-    }
+	}
 }
