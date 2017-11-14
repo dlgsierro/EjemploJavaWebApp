@@ -1,8 +1,9 @@
 pipeline {
     agent { dockerfile true }
     stages {
-		stage('Build') {
+	    stage('Build') {
 	        steps {
+	            checkout scm
 	            sh 'mvn -B -DskipTests clean package'
 	        }
 	    }
