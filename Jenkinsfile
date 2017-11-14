@@ -1,29 +1,18 @@
 node {
 	try {
 	    stage('Prepare') {
-	    	def app = docker.build('tomcat-maven')
+    		def app = docker.build('tomcat-maven')
 	    }
 	    stage('Build') {
-	        steps {
-	        	app.inside {
-	    			checkout scm
-		            sh 'mvn -DskipTests clean install'
-	        	}
-	        }
+        	app.inside {
+    			checkout scm
+	            sh 'mvn -DskipTests clean install'
+        	}
 	    }
 	    stage('Test') {
-	        steps {
-	        	app.inside {
-	            	sh 'mvn test findbugs:findbugs'
-	            }
-	        }
-			post {
-		        success {
-		            junit 'target/surefire-reports/*.xml'
-		            jacoco()
-		            findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
-		        }
-		    }
+        	app.inside {
+            	sh 'mvn test findbugs:findbugs'
+            }
 	    }
 	    stage('Deploy') {
 	        steps {
@@ -40,4 +29,10 @@ node {
 Thanks,
 Jenkins''', subject: 'Jenkins failure', to: 'gsierro@dl.cl'
 	}
+	finally {
+        junit 'target/surefire-reports/*.xml'
+        jacoco()
+        findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
+	}
+
 }
