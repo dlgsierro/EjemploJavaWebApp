@@ -1,5 +1,6 @@
 pipeline {
     stages {
+    	agent any
 	    stage('Prepare') {
 	    	checkout scm
 	    	def env = docker.build 'tomcat-maven'
