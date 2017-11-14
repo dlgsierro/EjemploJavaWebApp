@@ -3,7 +3,7 @@ pipeline {
     stages {
 	    stage('Prepare') {
 	    	checkout scm
-	    	def env = docker.build 'tomcat-maven'
+	    	def env = docker.build('tomcat-maven')
 	    }
 	    env.inside {
 		    stage('Build') {
