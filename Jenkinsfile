@@ -1,32 +1,36 @@
 node {
 	try {
 	    stage('Prepare') {
-	    	def env = docker.build('tomcat-maven')
+	    	def app = docker.build('tomcat-maven')
 	    }
-	    env.inside {
-		    stage('Build') {
-		        steps {
+	    stage('Build') {
+	        steps {
+	        	app.inside {
 	    			checkout scm
 		            sh 'mvn -DskipTests clean install'
+	        	}
+	        }
+	    }
+	    stage('Test') {
+	        steps {
+	        	app.inside {
+	            	sh 'mvn test findbugs:findbugs'
+	            }
+	        }
+			post {
+		        success {
+		            junit 'target/surefire-reports/*.xml'
+		            jacoco()
+		            findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
 		        }
 		    }
-		    stage('Test') {
-		        steps {
-		            sh 'mvn test findbugs:findbugs'
-		        }
-				post {
-			        success {
-			            junit 'target/surefire-reports/*.xml'
-			            jacoco()
-			            findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
-			        }
-			    }
-		    }
-		    stage('Deploy') {
-		        steps {
-		            sh 'mvn tomcat7:deploy'
-		        }
-		    }
+	    }
+	    stage('Deploy') {
+	        steps {
+	        	app.inside {
+	            	sh 'mvn tomcat7:deploy'
+	            }
+	        }
 	    }
 	}
 	catch(any) {
