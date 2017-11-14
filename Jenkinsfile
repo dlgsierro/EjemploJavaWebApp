@@ -1,12 +1,12 @@
 node {
 	try {
 	    stage('Prepare') {
-	    	checkout scm
 	    	def env = docker.build('tomcat-maven')
 	    }
-	    env.inside() {
+	    env.inside {
 		    stage('Build') {
 		        steps {
+	    			checkout scm
 		            sh 'mvn -DskipTests clean install'
 		        }
 		    }
