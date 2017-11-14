@@ -1,9 +1,16 @@
 pipeline {
-    agent { dockerfile true }
+    agent {
+    	docker{
+    	    image: 'tomcat:8.0-jre8-alpine'
+    	}
+	}
+	tools {
+        maven 'apache-maven-3.5.2' 
+    }
     stages {
 	    stage('Build') {
 	        steps {
-	            sh 'ls -lsa'
+	            sh 'mvn -DskipTests clean install'
 	        }
 	    }
 	    stage('Test') {
