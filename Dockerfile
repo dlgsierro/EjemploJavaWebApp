@@ -16,4 +16,5 @@ ADD docker/settings.xml /usr/local/tomcat/conf/
 ADD docker/tomcat-users.xml /usr/local/tomcat/conf/
 
 EXPOSE 8080
+VOLUME ["/root/.m2"]
 CMD ["catalina.sh", "run"]
