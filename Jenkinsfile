@@ -3,7 +3,7 @@ pipeline {
     stages {
 	    stage('Build') {
 	        steps {
-	            sh 'mvn -v'
+	            sh 'ls -lsa'
 	        }
 	    }
 	    stage('Test') {
