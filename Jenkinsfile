@@ -1,7 +1,7 @@
 pipeline {
 	agent {
 		docker {
-			image: 'tomcat:8.0-jre8-alpine'
+			image 'tomcat:8.0-jre8-alpine'
 		}
 	}
 	stages {
