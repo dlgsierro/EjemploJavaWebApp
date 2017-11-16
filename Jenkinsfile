@@ -1,7 +1,8 @@
 node {
 	try {
 		stage('Prepare') {
-			def app = docker.build('tomcat-maven')
+			docker.build('tomcat-maven')
+			def app = docker.image('tomcat-maven')
 		}
 		stage('Build') {
 			app.inside {
