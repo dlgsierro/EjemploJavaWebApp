@@ -1,9 +1,5 @@
 pipeline {
-	agent {
-		docker {
-			image 'tomcat:8.0-jre8-alpine'
-		}
-	}
+	agent none
 	stages {
 		stage('Build') {
 			steps {
@@ -16,6 +12,11 @@ pipeline {
 			}
 		}
 		stage('Deploy') {
+			agent {
+				docker {
+					image 'tomcat:8.0-jre8-alpine'
+				}
+			}
 			steps {
 				sh 'mvn tomcat7:deploy'
 			}
