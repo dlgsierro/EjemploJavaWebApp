@@ -1,22 +1,14 @@
 node {
 	try {
-		stage('Prepare') {
-			docker.build('tomcat-maven')
-			def app = docker.image('tomcat-maven')
-		}
 		stage('Build') {
-			app.inside {
-				checkout scm
-				sh 'mvn -DskipTests clean install'
-			}
+			checkout scm
+			sh 'mvn -DskipTests clean install'
 		}
 		stage('Test') {
-			app.inside {
-				sh 'mvn test findbugs:findbugs'
-			}
+			sh 'mvn test findbugs:findbugs'
 		}
 		stage('Deploy') {
-			app.inside {
+			docker.build('tomcat-maven').inside {
 				sh 'mvn tomcat7:deploy'
 			}
 		}
