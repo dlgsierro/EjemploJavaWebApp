@@ -4,7 +4,7 @@ pipeline {
 		stage('Preparación') {
 			steps {
 				checkout scm
-				docker.build('tomcat-webapp')
+				docker.image('tomcat-webapp')
 			}
 		}
 		stage('Construcción') {
