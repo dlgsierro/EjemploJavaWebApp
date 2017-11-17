@@ -2,6 +2,7 @@ pipeline {
 	agent any
 	stages {
 		stage('Construcción') {
+			agent { dockerfile true }
 			steps {
 				checkout scm
 				sh 'mvn -DskipTests clean package'
