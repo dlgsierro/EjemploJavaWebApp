@@ -1,12 +1,13 @@
 pipeline {
 	agent any
 	stages {
+		stage('Preparación') {
+			docker.build('tomcat-webapp')
+		}
 		stage('Construcción') {
-			agent { dockerfile true }
 			steps {
 				checkout scm
 				sh 'mvn -DskipTests clean package'
-				docker.build('tomcat-webapp')	
 			}
 		}
 		stage('Pruebas') {
@@ -28,7 +29,9 @@ pipeline {
 				}
 			}
 			steps {
-				sh 'ls -lsa'
+				script {
+				    input message: 'Approve deployment?'
+				}
 			}
 		}
 	}
