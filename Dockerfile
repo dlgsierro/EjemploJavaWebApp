@@ -6,5 +6,4 @@ ADD docker/tomcat-users.xml /usr/local/tomcat/conf/
 ADD target/webapp.war /usr/local/tomcat/webapps/
 
 EXPOSE 8080
-VOLUME ["/root/.m2"]
 CMD ["catalina.sh", "run"]
