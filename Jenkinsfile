@@ -12,12 +12,12 @@ node {
 			jacoco()
 			findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
 		}
-		stage('Integrar') {
+		stage('Integración') {
 			docker.image('tomcat-webapp').inside() {
-				sh 'ls -lsa'
-			}
-			script {
-				input message: 'Approve deployment?'
+				sh 'ls -ls /usr/local/tomcat/webapps/'
+				script {
+					input message: 'Approve deployment?'
+				}
 			}
 		}
 	}
