@@ -1,6 +1,8 @@
 node {
 	try {
 		stage('Preparación') {
+			cleanWs()
+			checkout csm
 			docker.build 'tomcat-webapp'
 		}
 		stage('Construcción') {
