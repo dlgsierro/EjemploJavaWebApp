@@ -1,43 +1,28 @@
-pipeline {
-	agent none
-	stages {
+node {
+	try {
 		stage('Preparación') {
-			agent { dockerfile true }
-			steps {
-				docker.build 'tomcat-webapp'
-			}
+			docker.build 'tomcat-webapp'
 		}
 		stage('Construcción') {
-			steps {
-				sh 'mvn -DskipTests clean package'
-			}
+			sh 'mvn -DskipTests clean package'
 		}
 		stage('Pruebas') {
-			steps {
-				sh 'mvn test findbugs:findbugs'
-			}
-			post {
-				success {
-					junit 'target/surefire-reports/*.xml'
-					jacoco()
-					findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
-				}
-			}
+			sh 'mvn test findbugs:findbugs'
+			junit 'target/surefire-reports/*.xml'
+			jacoco()
+			findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
 		}
 		stage('Integrar') {
-			agent {
-				docker {
-					image 'tomcat-webapp'
-				}
+			docker.image('tomcat-webapp').inside() {
+				sh 'ls -lsa'
 			}
-			steps {
-			    input message: 'Approve deployment?'
+			script {
+				input message: 'Approve deployment?'
 			}
 		}
 	}
-	post {
-		failure {
-			emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.\nThanks,\nJenkins''', subject: 'Jenkins failure', to: 'gsierro@dl.cl'
-		}
+	catch (any) {
+		emailext body: '''Your jenkins job \'webapp\' is failling, please review your submitted code and do the fixes.\nThanks,\nJenkins''', subject: 'Jenkins failure', to: 'gsierro@dl.cl'
+		throw any
 	}
 }
