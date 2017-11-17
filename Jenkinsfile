@@ -3,10 +3,10 @@ node {
 		stage('Preparación') {
 			cleanWs()
 			checkout scm
-			docker.build 'tomcat-webapp'
 		}
 		stage('Construcción') {
 			sh 'mvn -DskipTests clean package'
+			docker.build 'tomcat-webapp'
 		}
 		stage('Pruebas') {
 			sh 'mvn test findbugs:findbugs'
