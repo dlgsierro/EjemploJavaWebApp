@@ -4,7 +4,7 @@ pipeline {
 		stage('Preparación') {
 			agent { dockerfile true }
 			steps {
-				docker.image('tomcat-webapp')
+				docker.build 'tomcat-webapp'
 			}
 		}
 		stage('Construcción') {
