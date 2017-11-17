@@ -15,7 +15,7 @@ node {
 			findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugsXml.xml', unHealthy: ''
 		}
 		stage('Integración') {
-			docker.image('tomcat-webapp').inside() {
+			docker.image('tomcat-webapp').withRun('-p 80:8080') {
 				sh 'ls -ls /usr/local/tomcat/webapps/'
 				script {
 					input message: 'Approve deployment?'
