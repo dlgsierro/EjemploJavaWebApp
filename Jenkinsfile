@@ -16,7 +16,7 @@ node {
 		}
 		stage('Integración') {
 			docker.image('tomcat-webapp').withRun('-p 80:8080') {
-				sh 'ls -ls /usr/local/tomcat/webapps/'
+				sh 'ls -ls'
 				script {
 					input message: 'Approve deployment?'
 				}
