@@ -4,7 +4,6 @@ pipeline {
 		stage('Preparación') {
 			agent { dockerfile true }
 			steps {
-				checkout scm
 				docker.image('tomcat-webapp')
 			}
 		}
